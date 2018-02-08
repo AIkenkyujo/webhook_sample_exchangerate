@@ -1,0 +1,7 @@
+{
+  "name": "webhook demo",
+  "description": "webhook demo for exchangerate",
+  "repository": "https://github.com/AIkenkyujo/webhook_sample_exchangerate",
+  "logo": "http://xvir.github.io/img/apiai.png",
+  "keywords": ["api.ai", "natural language"]
+}
