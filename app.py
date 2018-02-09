@@ -81,8 +81,8 @@ def makeWebhookResult(data, currencies):
     rate1 = data["quotes"][currencies[0]]
     rate2 = data["quotes"][currencies[2]]
 
-    speech = "現在の " + currencies[1] + ":" + currencies[3] + \
-             "のレートは、" + str(round(rate2/rate1,4)) + "です。"
+    speech = "現在の 1" + currencies[1] + \
+             "のレートは、" + str(round(rate2/rate1,4)) +  currencies[3] + "です。"
 
     print("Response:")
     print(speech)
