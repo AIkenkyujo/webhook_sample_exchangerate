@@ -59,11 +59,14 @@ def processRequest(req):
         return {}
     # get data split ',&_'
     currency_list = re.split('[,_]', currencies)
+    print(currency_list)
     # for API string be create
     urlcurrency = currency_list[0] + ',' + currency_list[2]
     url = api.format(currencies=urlcurrency, key=API_KEY)
+    print(url)
     result = urlopen(url).read()
     data = json.loads(result)
+    print(data)
     res = makeWebhookResult(data, currency_list)
     return res
 
