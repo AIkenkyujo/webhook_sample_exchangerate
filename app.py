@@ -31,7 +31,7 @@ from flask import make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
-API_KEY = ''
+API_KEY = 'af306c0289c62fdea2ee87497ba888a6'
 api = "http://apilayer.net/api/live?access_key={key}&currencies={currencies}"
 
 @app.route('/webhook', methods=['POST'])
@@ -51,15 +51,16 @@ def webhook():
 
 
 def processRequest(req):
-    if req.get("result").get("action") != "WeatherForecast":
+    if req.get("result").get("action") != "check_rate":
         return {}
     currencies = makeQuery(req)
+    print(currencies)
     if currencies is None:
         return {}
     url = api.format(currencies=currencies, key=API_KEY)
     result = urlopen(url).read()
     data = json.loads(result)
-    res = makeWebhookResult(data)
+    res = makeWebhookResult(data, currencies)
     return res
 
 
@@ -71,16 +72,17 @@ def makeQuery(req):
     if currency1 is None or currency2 is None:
         return None
 
-    return ','.join(currency1,currency2)
+    return ','.join(currency1, currency2)
 
 
-def makeWebhookResult(data, ):
-    USD = 1
-    JPY = data["quotes"]["USDJPY"]
-    currency = data["quotes"][]
+def makeWebhookResult(data, currencies):
 
-    speech = "現在の " + location.get('city') + "の天気は" + condition.get('text') + \
-             "です。気温は、" + condition.get('temp') + " " + units.get('temperature') + "℃です。"
+    currencies = currencies.split(',').split('_')
+    rate1 = data["quotes"][currencies[0]]
+    rate2 = data["quotes"][currencies[2]]
+
+    speech = "現在の " + currencies[1] + ":" + currencies[3] + \
+             "のレートは、" + str(round(rate2/rate1,4)) + "です。"
 
     print("Response:")
     print(speech)
@@ -90,7 +92,7 @@ def makeWebhookResult(data, ):
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
+        "source": "apiai-rate-webhook-sample"
     }
 
 
