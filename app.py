@@ -21,7 +21,7 @@ install_aliases()
 from urllib.parse import urlparse, urlencode
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError
-
+import re
 import json
 import os
 
@@ -57,10 +57,14 @@ def processRequest(req):
     print(currencies)
     if currencies is None:
         return {}
-    url = api.format(currencies=currencies, key=API_KEY)
+    # get data split ',&_'
+    currency_list = re.split('[,_]', currencies)
+    # for API string be create
+    urlcurrency = currency_list[0] + ',' + currency_list[2]
+    url = api.format(currencies=urlcurrency, key=API_KEY)
     result = urlopen(url).read()
     data = json.loads(result)
-    res = makeWebhookResult(data, currencies)
+    res = makeWebhookResult(data, currency_list)
     return res
 
 
@@ -71,15 +75,13 @@ def makeQuery(req):
     currency2 = parameters.get("Currency2")
     if currency1 is None or currency2 is None:
         return None
-
-    return ','.join(currency1, currency2)
+    return ','.join([currency1, currency2])
 
 
 def makeWebhookResult(data, currencies):
 
-    currencies = currencies.split(',').split('_')
-    rate1 = data["quotes"][currencies[0]]
-    rate2 = data["quotes"][currencies[2]]
+    rate1 = data["quotes"]['USD' + currencies[0]]
+    rate2 = data["quotes"]['USD' + currencies[2]]
 
     speech = "現在の 1" + currencies[1] + \
              "のレートは、" + str(round(rate2/rate1,4)) +  currencies[3] + "です。"
