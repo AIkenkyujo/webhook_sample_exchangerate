@@ -67,8 +67,8 @@ def processRequest(req):
 def makeQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
-    currency1 = parameters.get("currency1")
-    currency2 = parameters.get("currency2")
+    currency1 = parameters.get("Currency1")
+    currency2 = parameters.get("Currency2")
     if currency1 is None or currency2 is None:
         return None
 
