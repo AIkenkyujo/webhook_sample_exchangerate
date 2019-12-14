@@ -96,8 +96,7 @@ def makeWebhookResult(data, currencies):
                     "items": [
                         {
                             "simpleResponse": {
-                                "textToSpeech": speech,
-                                "displayText": speech
+                                "textToSpeech": speech
                             }
                         }
                     ]
