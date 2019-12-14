@@ -36,22 +36,19 @@ api = "http://apilayer.net/api/live?access_key={key}&currencies={currencies}"
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    req = request.get_json(silent=True, force=True)
+    req = request.json.get("queryResult")
 
     print("Request:")
     print(json.dumps(req, indent=4))
 
     res = processRequest(req)
 
-    res = json.dumps(res, indent=4)
-    # print(res)
-    r = make_response(res)
-    r.headers['Content-Type'] = 'application/json'
-    return r
+    res = jsonify(res)
+    return make_response(res)
 
 
 def processRequest(req):
-    if req.get("result").get("action") != "check_rate":
+    if req.get("action") != "check_rate":
         return {}
     currencies = makeQuery(req)
     print(currencies)
@@ -72,8 +69,7 @@ def processRequest(req):
 
 
 def makeQuery(req):
-    result = req.get("result")
-    parameters = result.get("parameters")
+    parameters = req.get("parameters")
     currency1 = parameters.get("Currencies1")
     currency2 = parameters.get("Currencies2")
     if currency1 is None or currency2 is None:
@@ -92,12 +88,22 @@ def makeWebhookResult(data, currencies):
     print("Response:")
     print(speech)
 
-    return {
-        "speech": speech,
-        "displayText": speech,
-        # "data": data,
-        # "contextOut": [],
-        "source": "apiai-rate-webhook-sample"
+    return {"payload": {
+        "google": {
+            "expectUserResponse": True,
+            "richResponse":
+                {
+                    "items": [
+                        {
+                            "simpleResponse": {
+                                "textToSpeech": speech,
+                                "displayText": speech
+                            }
+                        }
+                    ]
+                }
+        }
+    }
     }
 
 
@@ -106,4 +112,4 @@ if __name__ == '__main__':
 
     print("Starting app on port %d" % port)
 
-    app.run(debug=False, port=port, host='0.0.0.0')
+    app.run(debug=True, port=port, host='0.0.0.0')
