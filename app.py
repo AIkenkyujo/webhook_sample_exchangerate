@@ -33,6 +33,7 @@ from flask import make_response, jsonify
 app = Flask(__name__)
 API_KEY = 'af306c0289c62fdea2ee87497ba888a6'
 api = "http://api.currencylayer.com/live?access_key={key}&currencies={currencies}"
+response = {}
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
