@@ -34,7 +34,6 @@ app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 API_KEY = 'af306c0289c62fdea2ee87497ba888a6'
 api = "http://api.currencylayer.com/live?access_key={key}&currencies={currencies}"
-response = {}
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -89,9 +88,7 @@ def makeWebhookResult(data, currencies):
     print("Response:")
     print(speech)
 
-    response["payload"] = {
-        "google": {
-            "expectUserResponse": True,
+    response = {
             "fulfillmentMessage":[
                 {
                     "text":{
@@ -99,7 +96,6 @@ def makeWebhookResult(data, currencies):
                     }
                 }
             ]
-        }
     }
     
     return response
