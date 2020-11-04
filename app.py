@@ -44,8 +44,10 @@ def webhook():
     print(json.dumps(req, indent=4))
 
     res = processRequest(req)
-    res = jsonify(res)
-    return make_response(res)
+    return res['queryResult']
+
+#     res = jsonify(res)
+#     return make_response(res)
 
 
 def processRequest(req):
