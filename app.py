@@ -88,22 +88,36 @@ def makeWebhookResult(data, currencies):
     print("Response:")
     print(speech)
 
-    return {"payload": {
+    response["payload"] = {
         "google": {
             "expectUserResponse": True,
-            "richResponse":
+            "fulfillmentMessage":[
                 {
-                    "items": [
-                        {
-                            "simpleResponse": {
-                                "textToSpeech": speech
-                            }
-                        }
-                    ]
+                    "text":{
+                        "text":[speech]
+                    }
                 }
+            ]
         }
     }
-    }
+    
+    return response
+#     return {"payload": {
+#         "google": {
+#             "expectUserResponse": True,
+#             "richResponse":
+#                 {
+#                     "items": [
+#                         {
+#                             "simpleResponse": {
+#                                 "textToSpeech": speech
+#                             }
+#                         }
+#                     ]
+#                 }
+#         }
+#     }
+#     }
 
 
 if __name__ == '__main__':
