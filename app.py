@@ -80,11 +80,16 @@ def makeQuery(req):
 
 def makeWebhookResult(data, currencies):
 
-    rate1 = data["quotes"]['USD' + currencies[0]]
-    rate2 = data["quotes"]['USD' + currencies[2]]
+    rate1 = 1.0
+    rate2 = 1.0
+
+    if currencies[0] != 'USD':
+        rate1 = data["quotes"]['USD' + currencies[0]]
+    if currencies[2] != 'USD':
+        rate2 = data["quotes"]['USD' + currencies[2]]
 
     speech = "現在の 1" + currencies[1] + \
-             "のレートは、" + str(round(rate2/rate1,4)) +  currencies[3] + "です。"
+             "のレートは、" + str(round(rate2/rate1, 4)) + currencies[3] + "です。"
 
     print("Response:")
     print(speech)
@@ -99,7 +104,7 @@ def makeWebhookResult(data, currencies):
             }
         ]
     }
-    
+
     return response
 #     return {"payload": {
 #         "google": {
